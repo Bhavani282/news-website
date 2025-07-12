@@ -1,15 +1,23 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useNews } from '../../../context/NewsContext';
 import Header from '../../../components/Header';
-
+import Image from "next/image";
 const NewsArticlePage = () => {
   const { selectedArticle } = useNews();
+
+  const [language, setLanguage] = useState('en');
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem('selectedLanguage') || 'en';
+    setLanguage(savedLang);
+  }, []);
 
   if (!selectedArticle) {
     return (
       <div>
-        <Header />
+        <Header language={language} setLanguage={setLanguage} />
         <main className="p-4">
           <p>No article data available. Please go back and select an article.</p>
         </main>
@@ -21,10 +29,10 @@ const NewsArticlePage = () => {
 
   return (
     <div>
-      <Header />
+      <Header language={language} setLanguage={setLanguage} />
       <main className="p-4">
         <h1 className="text-2xl font-bold mb-4">{title}</h1>
-        {urlToImage && <img src={urlToImage} alt={title} className="w-full max-h-[400px] object-cover mb-4 rounded" />}
+        {urlToImage && <Image src={urlToImage} alt={title} className="w-full max-h-[400px] object-cover mb-4 rounded" />}
         <p className="text-gray-600 mb-2">By {author || 'Unknown'} on {publishedAt}</p>
         <p className="mb-4">{description}</p>
         <p className="mb-4">{content}</p>

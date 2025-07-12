@@ -8,44 +8,54 @@ import Error from '../../components/Error';
 import NewsList from '../../components/NewsList';
 import Header from '../../components/Header';
 
+// ✅ Define Article type
+interface Article {
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  author: string;
+  source: { name: string };
+  content: string;
+}
+
 const SearchPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const q = searchParams.get('q') || '';
 
   const [language, setLanguage] = useState('en');
-  const [articles, setArticles] = useState<any[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // ✅ Load saved language on mount
   useEffect(() => {
     const savedLang = localStorage.getItem('selectedLanguage') || 'en';
     setLanguage(savedLang);
   }, []);
 
-  const getSearchResults = async () => {
-    if (!q) return;
-    try {
-      setLoading(true);
-      const data = await searchNews(q, language);
-      setArticles(data.articles || []);
-      setError('');
-    } catch (err) {
-      console.error(err);
-      setError('Failed to fetch search results');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ✅ Update URL param when language changes
   useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (!q) return;
+      try {
+        setLoading(true);
+        const data = await searchNews(q, language);
+        setArticles(data.articles || []);
+        setError('');
+      } catch (err) {
+        console.error(err);
+        setError('Failed to fetch search results');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (q) {
       router.push(`/search?q=${encodeURIComponent(q)}&lang=${language}`);
     }
-    getSearchResults();
-  }, [language, q]);
+    fetchSearchResults();
+  }, [language, q, router]);
 
   return (
     <div>

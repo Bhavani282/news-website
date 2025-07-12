@@ -7,6 +7,18 @@ import NewsList from '../../../components/NewsList';
 import Header from '../../../components/Header';
 import Pagination from '../../../components/Pagination';
 
+// ✅ Define Article interface
+interface Article {
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  author: string;
+  source: { name: string };
+  content: string;
+}
+
 const CategoryPage = () => {
   const params = useParams();
   const { category } = params as { category: string };
@@ -14,7 +26,7 @@ const CategoryPage = () => {
   const router = useRouter();
 
   const [language, setLanguage] = useState('en');
-  const [articles, setArticles] = useState<any[]>([]);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [disableNext, setDisableNext] = useState(false);
@@ -27,26 +39,27 @@ const CategoryPage = () => {
     setLanguage(savedLang);
   }, []);
 
-  const getCategoryNews = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchNewsByCategory(category, page, language);
-      setArticles(data.articles || []);
-      setDisableNext(!data.articles || data.articles.length < pageSize);
-      setError('');
-    } catch (err) {
-      console.error(err);
-      setError('Failed to fetch category news');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ✅ Update URL when language changes
+  // ✅ Fetch category news inside useEffect to avoid missing dependencies
   useEffect(() => {
+    const getCategoryNews = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchNewsByCategory(category, page, language);
+        setArticles(data.articles || []);
+        setDisableNext(!data.articles || data.articles.length < pageSize);
+        setError('');
+      } catch (err) {
+        console.error(err);
+        setError('Failed to fetch category news');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // ✅ Update URL when language changes and fetch news
     router.push(`/category/${category}?page=${page}&lang=${language}`);
     getCategoryNews();
-  }, [language, category, page]);
+  }, [language, category, page, router]);
 
   const handlePageChange = (newPage: number) => {
     router.push(`/category/${category}?page=${newPage}&lang=${language}`);

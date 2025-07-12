@@ -9,6 +9,7 @@ type Props = {
     content: string;
     publishedAt: string;
     author: string;
+    
   }>;
 };
 

@@ -1,10 +1,7 @@
 import React from "react";
 
-interface SpinnerProps {
-  text?: string; // Define the type of 'text' prop as string explicitly
-}
 
-const Spinner: React.FC<SpinnerProps> = ({ text }) => {
+const Spinner: React.FC = () => {
   return (
     <div className="fixed top-0 right-0 bottom-0 left-0 z-999999 flex items-center justify-center bg-white  bg-opacity-50 ">
       <div className="flex  justify-center gap-x-4 items-center">
