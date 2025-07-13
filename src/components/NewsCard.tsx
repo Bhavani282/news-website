@@ -24,7 +24,14 @@ const NewsCard = ({ article }: Props) => {
 
   return (
     <div className="border rounded-md p-4 mb-4 shadow hover:shadow-lg transition">
-      <Image src={article.urlToImage || '/placeholder.jpg'} alt={article.title} className="w-full h-48 object-cover mb-4 rounded" />
+     <Image
+  unoptimized
+  src={article.urlToImage || '/placeholder.jpg'}
+  alt={article.title}
+  width={400}
+  height={300}
+  className="w-full h-48 object-cover mb-4 rounded"
+/>
       <h2 className="text-xl font-bold mb-2">{article.title}</h2>
       <p className="mb-2">{article.description}</p>
       <Link href="/news/article">
