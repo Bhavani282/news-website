@@ -23,7 +23,7 @@ export const fetchTopHeadlines = async (
   page: number = 1,
   pageSize: number = 10
 ) => {
-  const response = await axios.get(`${BASE_URL}/everything`, {
+  const response = await axios.get(`${BASE_URL}/top-headlines`, {
     params: {
       q: query, 
       apiKey: API_KEY,
@@ -42,7 +42,7 @@ export const fetchNewsByCategory = async (
   page: number = 1,
   language: string = 'en'
 ) => {
-  const response = await axios.get(`${BASE_URL}/everything`, {
+  const response = await axios.get(`${BASE_URL}/top-headlines`, {
     params: {
       q: category,
       apiKey: API_KEY,
